@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Bulma-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <!--구글폰트-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-latest.js"></script> 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <title>회원가입</title>
+    <style>
+
+      #stuff{
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 500px;
+        margin: auto;
+        
+      }
+      .top{
+        background-color: white;
+        font-family: 'Gamja Flower', cursive;
+      
+        
+      }
+      .top .title{
+        font-size: 60px;
+        text-align: center;
+      }
+      .main{
+        padding: 50px 150px;
+      }
+      .main .tfield{
+        width:500px;
+        margin:auto;
+        padding: 10px 0px;
+      }
+      .main .control01{
+        width: 500px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 20px;
+      }
+      .main .control01 #input01{
+        width: 400px;
+      }
+      .main .control01 .button{
+        width: 80px;
+      }
+      .main .main02{
+        padding: 20px;
+        
+      }
+      .bottom{
+        padding: 20px 10px;
+        
+      }.bottom .control{
+        padding: 10px;
+        
+      }
+    </style>
+    <script>
+        function checkID(){
+          let id = $("#input01").val();
+          $.ajax({
+            type: "POST",
+            url: "/sign/check",
+            data: {id_give: id},
+            success: function(response){
+              if (response["result"] == "success"){
+                alert('사용가능합니다!');
+            } else {
+                alert(response['msg']);
+              }
+              }
+            });
+          }
+      function postData() {
+          let name = $("#name").val();
+          let id = $("#input01").val();
+          let pw = $("#pw").val();
+          let phone = $("#phone").val();
+          if ($("input:radio[name='dryingrack']:checked").val() == "yes") {
+            var dryingrack = 1;
+          } else {
+            var dryingrack = 0;
+          }
+        
+          if ($("input:radio[name='curlingiron']:checked").val() == "yes") {
+            var curlingiron = 1;
+          } else {
+            var curlingiron = 0;
+          }
+        
+          if ($("input:radio[name='detergent']:checked").val() == "yes") {
+            var detergent = 1;
+          } else {
+            var detergent = 0;
+          }
+        
+          if ($("input:radio[name='fever']:checked").val() == "yes") {
+            var fever = 1;
+          } else {
+            var fever = 0;
+          }
+        
+          if ($("input:radio[name='hanger']:checked").val() == "yes") {
+            var hanger = 1;
+          } else {
+            var hanger = 0;
+          }
+        
+          if ($("input:radio[name='painkiller']:checked").val() == "yes") {
+            var painkiller = 1;
+          } else {
+            var painkiller = 0;
+          }
+          $.ajax({
+            type: "POST",
+            url: "/sign",
+            data: {
+              id_give: id,
+              name_give: name,
+              pw_give: pw,
+              phone_give: phone,
+              dryingrack_give: dryingrack,
+              curlingiron_give: curlingiron,
+              detergent_give: detergent,
+              fever_give: fever,
+              hanger_give: hanger,
+              painkiller_give: painkiller
+            },
+            success: function(response) {
+              if (response["result"] == "success") {
+                alert("빌려주삼의 회원이 되셨습니다.");
+                window.location.href = '/'
+              } else {
+                alert(response['msg']);
+              }
+            }
+          });
+        }
+        function cancel(){
+          window.location.href = '/'
+        }
+    </script>
+</head>
+<body>
+  <div class="wrap">
+  <div class="top">
+    <section class="hero is-info">
+      <div class="hero-body">
+        <p class="title">
+          빌려주삼
+        </p>
+      </div>
+    </section>
+  </div>
+  <div class="main">
+    <div class="main01">
+      <div class="tfield">
+        <label class="label">이름</label>
+        <div class="control">
+          <input id="name" class="input" type="text" placeholder="홍길동">
+        </div>
+      </div>
+      <div class="tfield">
+          <label class="label">ID</label>
+          <div class="control01">
+            <input id="input01" class="input" type="text" placeholder="gildong01">
+            <button class="button is-info" onclick="checkID()">중복 확인</button>
+          </div>
+      </div>
+      <div class="tfield">
+          <label class="label">PW</label>
+          <div class="control">
+            <input id="pw" class="input" type="password" placeholder="******">
+          </div>
+      </div>
+      <div class="tfield">
+        <label class="label">연락처</label>
+        <div class="control">
+          <input id="phone" class="input" type="text" placeholder="000-0000-0000">
+        </div>
+        <p class="help is-danger">"-"를 포함하여 입력해주세요</p>
+      </div>
+      <div class="tfield">
+        <label class="label">보유 물품</label>
+      </div>
+    </div>
+      
+    <div class="main02">
+      <div id="stuff" class="field">
+        <!-- <label class="label">보유 물품</label> -->
+        
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">건조대</label>
+          </div>
+  
+          <div class="field-label is-normal">
+            <div class="field">
+              <p class="control is-expanded has-icons-left has-icons-right">
+                <label class="label">
+                  <input type="radio" name="dryingrack" value="yes">
+                    Yes
+                  <input type="radio" name="dryingrack" value="no">
+                    No
+                  </label>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </p>
+            </div>
+          </div>
+          
+          <div class="field-label is-normal">
+            <label class="label">고데기</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <label class="label">
+                <input type="radio" name="curlingiron" value="yes">
+                  Yes
+                <input type="radio" name="curlingiron" value="no">
+                  No
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">세제</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <p class="control is-expanded has-icons-left has-icons-right">
+                <label class="label">
+                  <input type="radio" name="detergent" value="yes">
+                    Yes
+                  <input type="radio" name="detergent" value="no">
+                    No
+                  </label>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="field-label is-normal">
+            <label class="label">해열제</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <label class="label">
+                <input type="radio" name="fever" value="yes">
+                  Yes
+                <input type="radio" name="fever" value="no">
+                  No
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">옷걸이</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <p class="control is-expanded has-icons-left has-icons-right">
+                <label class="label">
+                  <input type="radio" name="hanger" value="yes">
+                    Yes
+                  <input type="radio" name="hanger" value="no">
+                    No
+                  </label>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="field-label is-normal">
+            <label class="label">진통제</label>
+          </div>
+          <div id="Y" class="field-label is-normal">
+            <div class="field">
+              <label class="label">
+                <input type="radio" name="painkiller" value="yes">
+                  Yes
+                <input type="radio" name="painkiller" value="no">
+                  No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="bottom">
+    <div class="field is-grouped" style="justify-content: center;">
+      <div class="control">
+        <button class="button is-info" onclick="postData()">가 입</button>
+      </div>
+      <div class="control">
+        <button class="button is-info is-light" onclick="cancel()">취 소</button>
+      </div>
+  </div>
+  </div>
+  </div>
+      <!-- <div class="field">
+        <label class="label">Subject</label>
+        <div class="control">
+          <div class="select">
+            <select>
+              <option>Select dropdown</option>
+              <option>With options</option>
+            </select>
+          </div>
+        </div>
+      </div> -->
+
+    
+
+    
+    
+    
+    
+</body>
+</html>

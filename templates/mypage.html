@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Bulma-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <!--구글폰트-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-latest.js"></script> 
+    <title>마이페이지</title>
+    <style>
+      .top {font-family: 'Gamja Flower', cursive;}
+
+      #stuff{
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 500px;
+        margin: auto;
+        
+      }
+      .top .title{
+        font-size: 60px;
+        text-align: center;
+      }
+      
+      .main{
+        padding: 50px 150px;
+      }
+      .main .field .label{
+        text-align: center;
+      }
+      .main .tfield{
+        width:500px;
+        margin:auto;
+        padding: 10px 0px;
+      }
+      .main .control01{
+        width: 500px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 20px;
+      }
+      .main .control01 #input01{
+        width: 400px;
+      }
+      .main .control01 .button{
+        width: 80px;
+      }
+      .main .main01 .field .label{
+        font-weight: bold;
+        font-size: 23px;
+        padding-bottom: 20px;
+      } 
+      
+      .main .main002{
+        padding: 10px;
+        
+      }
+      .bottom{
+        padding: 20px 10px;
+        
+      }.bottom .control{
+        padding: 10px;
+        
+      }
+    </style>
+    <script>
+      $(document).ready(function(){
+        show();
+      });
+      function del_m(){
+        $.ajax({
+                type: 'POST',
+                url: '/mypage/delete',
+                data: {},
+                success: function (response) {
+                  if (response['result'] == 'success'){
+                      alert('삭제 완료!');
+                      window.location.href = '/';
+                      }
+                    }
+                });
+
+      }
+
+      function edit() {
+        let pw = $("#pw").val();
+        let phone = $("#num").val();
+        if ($("input:radio[name='dryingrack']:checked").val() == "yes") {
+          var dryingrack = 1;
+        } else {
+          var dryingrack = 0;
+        }     
+        if ($("input:radio[name='curlingiron']:checked").val() == "yes") {
+          var curlingiron = 1;
+        } else {
+          var curlingiron = 0;
+        }    
+        if ($("input:radio[name='detergent']:checked").val() == "yes") {
+          var detergent = 1;
+        } else {
+          var detergent = 0;
+        }      
+        if ($("input:radio[name='fever']:checked").val() == "yes") {
+          var fever = 1;
+        } else {
+          var fever = 0;
+        }      
+        if ($("input:radio[name='hanger']:checked").val() == "yes") {
+          var hanger = 1;
+        } else {
+          var hanger = 0;
+        }     
+        if ($("input:radio[name='painkiller']:checked").val() == "yes") {
+          var painkiller = 1;
+        } else {
+          var painkiller = 0;
+        }
+        $.ajax({
+          type: "POST",
+          url: "/mypage/edit",
+          data: {
+            'pw_give': pw,
+            'num_give': phone,
+            'dryingrack_give': dryingrack,
+            'curlingiron_give': curlingiron,
+            'detergent_give': detergent,
+            'fever_give': fever,
+            'hanger_give': hanger,
+            'painkiller_give': painkiller
+          },
+          success: function(response) {
+            if (response["result"] == "success") {
+              alert("수정완료 되었습니다.");
+              window.location.href = '/find'
+            }
+          }
+        });
+      }
+      function cancel(){
+          window.location.href = '/find'
+        }
+    </script>
+</head>
+<body>
+  <div class="wrap">
+  <div class="top">
+    <section class="hero is-info">
+      <div class="hero-body">
+        <p class="title">빌려주삼</p>
+      </div>
+    </section>
+  </div>
+  <div class="main">
+    <div id="main01" class="main01">
+        <div class="field">
+            <label id="name" class="label">{{user_info.name_give}}
+              <span> 님</span>
+            </label>
+            <div class="main02">
+              
+            </div>
+        </div>
+        <div class="tfield">
+            <label class="label">ID</label>
+            <div class="control">
+                <input id="id" class="input" type="text" value="{{user_info.id}}" readonly>
+            </div>
+        </div>
+      <div class="tfield">
+          <label class="label">PW</label>
+          <div class="control">
+            <input id="pw" class="input" type="text" value="{{user_info.pw}}">
+          </div>
+      </div>
+      <div class="tfield">
+        <label class="label">연락처</label>
+        <div class="control">
+          <input id="num" class="input" type="text" value="{{user_info.phone}}">
+        </div>
+        <p class="help is-danger"> "-"를 포함하여 입력해주세요</p>
+      </div>
+      <div class="tfield">
+        <label class="label">보유 물품</label>
+      </div>
+    </div>
+      
+    <div class="main002">
+      <div id="stuff" class="field">        
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">건조대</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <p class="control is-expanded has-icons-left has-icons-right">
+                <label class="label">
+                  <input type="radio" name="dryingrack" value="yes" {{d_check}}>
+                    Yes 
+                  <input type="radio" name="dryingrack" value="no" {{d_Ncheck}}>
+                    No
+                  </label>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </p>
+            </div>
+          </div>
+          
+          <div class="field-label is-normal">
+            <label class="label">고데기</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <label class="label">
+                <input type="radio" name="curlingiron" value="yes" {{c_check}}>
+                  Yes 
+                <input type="radio" name="curlingiron" value="no" {{c_Ncheck}}>
+                  No
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">세제</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <p class="control is-expanded has-icons-left has-icons-right">
+                <label class="label">
+                  <input type="radio" name="detergent" value="yes" {{de_check}} >
+                    Yes
+                  <input type="radio" name="detergent" value="no" {{de_Ncheck}}>
+                    No
+                  </label>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="field-label is-normal">
+            <label class="label">해열제</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <label class="label">
+                <input type="radio" name="fever" value="yes" {{f_check}}>
+                  Yes
+                <input type="radio" name="fever" value="no" {{f_Ncheck}}>
+                  No
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">옷걸이</label>
+          </div>
+          <div class="field-label is-normal">
+            <div class="field">
+              <p class="control is-expanded has-icons-left has-icons-right">
+                <label class="label">
+                  <input type="radio" name="hanger" value="yes" {{h_check}}>
+                    Yes
+                  <input type="radio" name="hanger" value="no" {{h_Ncheck}}>
+                    No
+                  </label>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="field-label is-normal">
+            <label class="label">진통제</label>
+          </div>
+          <div id="Y" class="field-label is-normal">
+            <div class="field">
+              <label class="label">
+                <input type="radio" name="painkiller" value="yes" {{p_check}}>
+                  Yes
+                <input type="radio" name="painkiller" value="no" {{p_Ncheck}}>
+                  No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="bottom">
+    <div class="field is-grouped" style="justify-content: center;">
+      <div class="control">
+        <button class="button is-info" onclick="edit()" >수 정</button>
+      </div>
+      <div class="control">
+        <button class="button is-info is-outlined" onclick="del_m()">회원탈퇴</button>
+      </div>
+      <div class="control">
+        <button class="button is-info is-light" onclick="cancel()">뒤로가기</button>
+      </div>
+  </div>
+  </div>
+  </div>
+
+</body>
+</html>

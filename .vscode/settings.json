@@ -1,0 +1,5 @@
+{
+    "[django-html]": {
+        "workbench.editor.languageDetection": false
+    }
+}
