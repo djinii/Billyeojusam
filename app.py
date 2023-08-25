@@ -1,12 +1,18 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, render_template, jsonify, request,redirect,url_for
 import jwt
 import hashlib
 from datetime import datetime,timedelta
-app = Flask(__name__)
-SECRET_KEY = 'REDSEVEN'
-
 from pymongo import MongoClient
-client = MongoClient('mongodb://test:test@13.124.146.75',27017)
+
+load_dotenv()
+
+app = Flask(__name__)
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+
+client = MongoClient(os.getenv('MONGO_URI'))
 db = client.dbjungle
 
 
@@ -222,4 +228,4 @@ def modify():
     return jsonify({"result": "success", "msg":"회원정보가 수정되었습니다."})
 
 if __name__ == '__main__':
-   app.run('0.0.0.0',port=5000,debug=True)
+   app.run('0.0.0.0',port=8000,debug=True)
